@@ -1,130 +1,77 @@
-# Azure Databricks Real-World Data Engineering Project  
+# Formula 1 Performance Analytics Engine
 
-Welcome to the **Azure Databricks Real-World Data Engineering Project** repository! This project is designed to help you learn how to build a complete data engineering solution using Azure Databricks and associated Azure services.  
-
-The solution involves analyzing and reporting on **Formula 1 motor racing data** using the latest features and tools, such as Delta Lake, Unity Catalog, and Azure Data Factory. By the end of this project, you will have hands-on experience implementing a modern Lakehouse architecture with end-to-end automation, data governance, and visualization.  
+A end-to-end data engineering project built on **Azure Databricks**, processing Formula 1 racing data through a full Lakehouse architecture — from raw ingestion to interactive dashboards.
 
 ---
 
-## Table of Contents  
-1. [Project Overview](#project-overview)  
-2. [Features](#features)  
-3. [Technologies Used](#technologies-used)  
-4. [Setup and Installation](#setup-and-installation)  
-5. [How to Use](#how-to-use)  
-6. [Prerequisites](#prerequisites)  
-7. [Who Can Benefit](#who-can-benefit)  
+## Architecture Overview
+
+Raw F1 data → **Azure Data Lake Gen2** → **Azure Databricks** (PySpark + Spark SQL) → **Delta Lake** (Bronze/Silver/Gold) → **Power BI**
+
+Pipeline orchestration is handled via **Azure Data Factory**, with secrets managed through **Azure Key Vault**.
 
 ---
 
-## Project Overview  
-This project simulates a real-world data engineering solution by:  
-- Ingesting raw Formula 1 racing data into **Azure Data Lake Gen2**.  
-- Transforming and analyzing the data in **Azure Databricks** using **PySpark** and **Spark SQL**.  
-- Leveraging **Delta Lake** for implementing Lakehouse architecture features.  
-- Enabling data governance through **Unity Catalog**.  
-- Automating data pipelines using **Azure Data Factory**.  
-- Visualizing the results with interactive **Power BI dashboards**.  
+## Tech Stack
 
-This project equips you with the skills required to build scalable, secure, and efficient data engineering pipelines using Azure's modern data stack.  
-
----
-
-## Features  
-- **Lakehouse Architecture**: Combines the scalability of data lakes and performance of data warehouses using Delta Lake.  
-- **Data Governance**: Centralized governance using Unity Catalog for data discovery, lineage, auditing, and access control.  
-- **Pipeline Automation**: End-to-end workflows managed via Azure Data Factory.  
-- **Interactive Dashboards**: Power BI reports connect directly to Databricks for visualization.  
-- **Incremental and Full Loads**: Demonstrates efficient patterns for loading data into Delta Lake.  
+| Layer | Technology |
+|---|---|
+| Processing | Azure Databricks, PySpark, Spark SQL |
+| Storage | Azure Data Lake Gen2 |
+| Table Format | Delta Lake |
+| Orchestration | Azure Data Factory |
+| Governance | Unity Catalog |
+| Visualization | Power BI |
 
 ---
 
-## Technologies Used  
-- **Azure Databricks**: Core platform for data processing.  
-- **Delta Lake**: Provides features like schema enforcement, versioning, and time travel.  
-- **Unity Catalog**: Ensures robust data governance.  
-- **Azure Data Lake Gen2**: Stores raw and processed data.  
-- **Azure Data Factory**: Automates ETL workflows.  
-- **Power BI**: Visualizes results with interactive dashboards.  
+## Project Structure
 
-
-
-## Setup and Installation  
-### Azure Service Setup:  
-1. **Create an Azure Databricks workspace**.  
-2. **Configure Azure Data Lake Gen2** for data storage.  
-3. **Set up Azure Data Factory pipelines** for workflow automation.  
-
-### Databricks Workspace Configuration:  
-1. Import the provided Databricks notebooks into your workspace.  
-2. Configure secrets using **Azure Key Vault** for secure storage access.  
-
-### Unity Catalog Enablement (Optional):  
-1. Set up Unity Catalog to manage governance features.  
-
-### Run the Solution:  
-Follow the project steps outlined below.  
+```
+Formula1/
+├── ingestion/          # Raw data ingestion notebooks (circuits, races, drivers, results, etc.)
+├── transformation/     # PySpark transformations → race results, standings
+├── Incremental load/   # Delta Lake incremental load pattern (upserts, partitioning)
+├── viz_layer/          # SQL queries powering Power BI dashboards
+├── raw/                # Raw table DDLs
+├── setup/              # ADLS mounting and access configuration
+└── demo/               # Exploratory notebooks (joins, aggregations, Delta Lake features)
+```
 
 ---
 
-## How to Use  
-### Step 1: Data Ingestion  
-- Load raw Formula 1 racing data into Azure Data Lake Gen2.  
+## Key Implementations
 
-### Step 2: Data Transformation  
-- Use Databricks notebooks to process data using PySpark and Spark SQL.  
-
-### Step 3: Data Governance  
-- Enable and configure Unity Catalog for centralized governance.  
-
-### Step 4: Workflow Automation  
-- Design pipelines in Azure Data Factory to automate data processing.  
-
-### Step 5: Visualization  
-- Connect Power BI to Databricks to visualize the processed data.  
+- **Full & Incremental Loads** — implemented both patterns using Delta Lake merge (upsert) logic
+- **Lakehouse Architecture** — Bronze → Silver → Gold layer separation using Delta tables
+- **Data Governance** — Unity Catalog for data lineage, access control, and discoverability
+- **Pipeline Automation** — ADF pipelines trigger Databricks notebooks end-to-end on a schedule
+- **Parameterized Notebooks** — reusable ingestion logic driven by configuration files
 
 ---
 
-## Prerequisites  
-- Basic Python programming and SQL knowledge.  
-- An active Azure subscription (free or paid).  
-- Familiarity with Azure Portal or Azure CLI for configuration.  
+## Dashboards
 
----
-
-## Who Can Benefit  
-- **University Students**: Learning data engineering hands-on.  
-- **IT Professionals**: Transitioning into cloud-based data roles.  
-- **Data Engineers**: Exploring Lakehouse and governance solutions.  
-- **Data Architects**: Understanding Azure's modern data stack.  
-
----
-
-# Formula 1 Dashboards
-
-This repository contains dashboards that provide insightful visualizations for Formula 1 teams and drivers. These dashboards were designed to analyze and interpret key performance metrics.
-
----
-
-## Drivers Dashboard
-
+### Drivers Dashboard
 ![Drivers Dashboard](Formula1/Drivers_dashboard.jpg)
 
-This dashboard highlights individual driver performance, including metrics such as lap times, race positions, and season progress.
-
----
-
-## Team Dashboard
-
+### Team Dashboard
 ![Team Dashboard](Formula1/Team_dashboard.jpg)
 
-The Team Dashboard focuses on team-level performance, showcasing comparisons between teams, strategy analyses, and overall standings.
+---
+
+## Setup
+
+1. Create an Azure Databricks workspace and ADLS Gen2 storage account
+2. Configure secrets in Azure Key Vault and link to Databricks secret scope
+3. Mount ADLS containers using `setup/8.mount_adls_containers_for_project.py`
+4. Run ingestion notebooks under `ingestion/` to populate the Bronze layer
+5. Execute transformation notebooks to build Silver and Gold layers
+6. Import ADF pipeline templates to automate the workflow
+7. Connect Power BI to Databricks SQL warehouse for visualization
 
 ---
 
-## Conclusion  
-This project provides an end-to-end guide to building a real-world data engineering pipeline using Azure Databricks. You'll gain practical experience with Delta Lake, Unity Catalog, Azure Data Factory, and Power BI.  
+## Skills Demonstrated
 
-Explore this repository to enhance your data engineering expertise and prepare for certifications like Azure Data Engineer Associate and Databricks Certified Data Engineer Associate.  
-
-
+`PySpark` `Spark SQL` `Delta Lake` `Azure Data Lake` `Azure Data Factory` `Unity Catalog` `Incremental Data Loading` `Lakehouse Architecture` `Data Pipeline Orchestration` `Power BI`
